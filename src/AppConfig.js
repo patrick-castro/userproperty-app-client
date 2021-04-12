@@ -8,7 +8,7 @@ import App from './App';
 import reducers from './reducers';
 
 const client = new ApolloClient({
-  uri: '/graphql',
+  uri: 'https://userproperties-app-server.herokuapp.com/graphql', // GraphQL API
   cache: new InMemoryCache(),
 });
 
