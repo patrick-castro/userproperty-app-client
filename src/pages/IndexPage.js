@@ -30,7 +30,14 @@ const renderUserPropertyList = (loading, error, data) => {
   const errorStyle = { color: '#9f3a38' };
 
   // Loading and error handling
-  if (loading) return <h4>Loading...</h4>;
+  if (loading) {
+    return (
+      <div>
+        <div class='ui massive active loader'></div>
+      </div>
+    );
+  }
+
   if (error && error.toString().includes('SyntaxError'))
     return (
       <h4 style={errorStyle}>Error! Please remove any special character/s!</h4>
