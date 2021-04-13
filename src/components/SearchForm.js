@@ -46,21 +46,39 @@ const SearchForm = ({ onSearchUsers }) => {
 
   // Generate a drop down that has the list of names of matched users.
   const renderMatchedNames = () => {
-    if (data.users.length < 1) return null;
+    if (!data) return null;
     if (searchString.length === 0) return null;
 
-    if (loading) {
-      <div
-        className='ui segments'
-        style={{
-          position: 'absolute',
-          zIndex: '1',
-          minWidth: '50%',
-        }}>
-        <div className='ui segment'>
-          <p>Loading</p>
+    if (data.users.length < 1) {
+      return (
+        <div
+          className='ui segments'
+          style={{
+            position: 'absolute',
+            zIndex: '1',
+            minWidth: '50%',
+          }}>
+          <div className='ui segment'>
+            <p>Nothing found!</p>
+          </div>
         </div>
-      </div>;
+      );
+    }
+
+    if (loading) {
+      return (
+        <div
+          className='ui segments'
+          style={{
+            position: 'absolute',
+            zIndex: '1',
+            minWidth: '50%',
+          }}>
+          <div className='ui segment'>
+            <p>Loading...</p>
+          </div>
+        </div>
+      );
     }
 
     return (
