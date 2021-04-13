@@ -46,7 +46,6 @@ const SearchForm = ({ onSearchUsers }) => {
   const renderLoading = () => {
     // Prompts users if the query is still loading
     if (searchString.length > 0) {
-      console.log('Loading in Search Form');
       return (
         <div
           className='ui segments'
