@@ -9,18 +9,15 @@ const SearchForm = ({ onSearchUsers }) => {
   const [showError, setShowError] = useState(false); // Tracks if there is a thrown error.
   const [closeDropDown, setCloseDropDown] = useState(false); // Monitors the result drop down in the search field.
   const [mouseHover, setMouseHover] = useState(false); // Tracks if the cursor is currently hovering in the drop down list.
-  const [isLoading, setIsLoading] = useState(false); // Custom loader to track the keypress
 
   // Query to get the full names of users that matches the search string.
   const [getUserNames, { loading, data }] = useLazyQuery(QUERY_NAMES);
 
   useEffect(() => {
     if (searchString.length > 1) {
-      setIsLoading(true);
       // This will only be triggered when the user typed in a string with more than one characters.
       // There is a 0.5s delay to execute the getUserNames method so that it won't be fired every keypress.
       const timeOutId = setTimeout(() => {
-        setIsLoading(false);
         getUserNames({ variables: { searchString } });
       }, 500);
       return () => clearTimeout(timeOutId);
@@ -34,7 +31,7 @@ const SearchForm = ({ onSearchUsers }) => {
     if (searchString.length < 1) {
       return setShowError(true);
     }
-
+    setCloseDropDown(true);
     setShowError(false);
     onSearchUsers(searchString);
   };
@@ -63,6 +60,11 @@ const SearchForm = ({ onSearchUsers }) => {
         </div>
       );
     }
+  };
+
+  const onChangeSearchField = (searchValue) => {
+    setCloseDropDown(false);
+    setSearchString(searchValue);
   };
 
   // Generate a drop down that has the list of names of matched users.
@@ -129,13 +131,13 @@ const SearchForm = ({ onSearchUsers }) => {
               type='text'
               placeholder='Search users...'
               value={searchString}
-              onChange={(e) => setSearchString(e.target.value)}
+              onChange={(e) => onChangeSearchField(e.target.value)}
             />
             <button className='ui button' type='submit'>
               <i className='search icon'></i>Search
             </button>
           </div>
-          {(loading || isLoading) && renderLoading()}
+          {loading && renderLoading()}
           {data && !closeDropDown && renderMatchedNames()}
         </form>
       </div>
