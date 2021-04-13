@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
 
 // Local imports
@@ -13,6 +13,18 @@ const SearchForm = ({ onSearchUsers }) => {
   // Query to get the full names of users that matches the search string.
   const [getUserNames, { loading, data }] = useLazyQuery(QUERY_NAMES);
 
+  useEffect(() => {
+    // This will only be triggered when the user typed in a string with more than one characters.
+    // There is a 0.5s delay to execute the getUserNames method so that it won't be fired every keypress.
+    if (searchString.length > 1) {
+      const timeOutId = setTimeout(
+        () => getUserNames({ variables: { searchString } }),
+        500
+      );
+      return () => clearTimeout(timeOutId);
+    }
+  }, [searchString]);
+
   // This gets triggered when the user pressed enter on the input field or when they hit the search button.
   const onSubmitForm = (e) => {
     e.preventDefault();
@@ -23,18 +35,6 @@ const SearchForm = ({ onSearchUsers }) => {
 
     setShowError(false);
     onSearchUsers(searchString);
-  };
-
-  // This gets triggered on the keypress in the input field.
-  const onChangeInputField = (searchValue) => {
-    setSearchString(searchValue);
-    if (searchValue.length > 1) {
-      setCloseDropDown(false);
-      setTimeout(
-        getUserNames({ variables: { searchString: searchValue } }),
-        700
-      );
-    }
   };
 
   // Store the selected name and searches it.
@@ -49,6 +49,7 @@ const SearchForm = ({ onSearchUsers }) => {
     if (!data) return null;
     if (searchString.length === 0) return null;
 
+    // Prompts users if there is no result for the query.
     if (data.users.length < 1) {
       return (
         <div
@@ -65,6 +66,7 @@ const SearchForm = ({ onSearchUsers }) => {
       );
     }
 
+    // Prompts users if the query is still loading
     if (loading) {
       return (
         <div
@@ -124,7 +126,7 @@ const SearchForm = ({ onSearchUsers }) => {
               type='text'
               placeholder='Search users...'
               value={searchString}
-              onChange={(e) => onChangeInputField(e.target.value)}
+              onChange={(e) => setSearchString(e.target.value)}
             />
             <button className='ui button' type='submit'>
               <i className='search icon'></i>Search
