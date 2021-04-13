@@ -31,6 +31,7 @@ const renderUserPropertyList = (loading, error, data) => {
 
   // Loading and error handling
   if (loading) {
+    console.log('Loading in Index Page');
     return (
       <div>
         <div className='ui massive active loader'></div>

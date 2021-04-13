@@ -11,7 +11,7 @@ const SearchForm = ({ onSearchUsers }) => {
   const [mouseHover, setMouseHover] = useState(false); // Tracks if the cursor is currently hovering in the drop down list.
 
   // Query to get the full names of users that matches the search string.
-  const [getUserNames, { loading, data }] = useLazyQuery(QUERY_NAMES);
+  const [getUserNames, { loading: loadName, data }] = useLazyQuery(QUERY_NAMES);
 
   useEffect(() => {
     if (searchString.length > 1) {
@@ -46,7 +46,7 @@ const SearchForm = ({ onSearchUsers }) => {
   const renderLoading = () => {
     // Prompts users if the query is still loading
     if (searchString.length > 0) {
-      console.log(loading);
+      console.log('Loading in Search Form');
       return (
         <div
           className='ui segments'
@@ -138,7 +138,7 @@ const SearchForm = ({ onSearchUsers }) => {
               <i className='search icon'></i>Search
             </button>
           </div>
-          {loading && renderLoading()}
+          {loadName && renderLoading()}
           {data && !closeDropDown && renderMatchedNames()}
         </form>
       </div>
