@@ -11,7 +11,7 @@ const SearchForm = ({ onSearchUsers }) => {
   const [mouseHover, setMouseHover] = useState(false); // Tracks if the cursor is currently hovering in the drop down list.
 
   // Query to get the full names of users that matches the search string.
-  const [getUserNames, { loading, error, data }] = useLazyQuery(QUERY_NAMES);
+  const [getUserNames, { loading, data }] = useLazyQuery(QUERY_NAMES);
 
   // This gets triggered when the user pressed enter on the input field or when they hit the search button.
   const onSubmitForm = (e) => {
@@ -48,6 +48,20 @@ const SearchForm = ({ onSearchUsers }) => {
   const renderMatchedNames = () => {
     if (data.users.length < 1) return null;
     if (searchString.length === 0) return null;
+
+    if (loading) {
+      <div
+        className='ui segments'
+        style={{
+          position: 'absolute',
+          zIndex: '1',
+          minWidth: '50%',
+        }}>
+        <div className='ui segment'>
+          <p>Loading</p>
+        </div>
+      </div>;
+    }
 
     return (
       <div
