@@ -33,7 +33,7 @@ const renderUserPropertyList = (loading, error, data) => {
   if (loading) {
     return (
       <div>
-        <div class='ui massive active loader'></div>
+        <div className='ui massive active loader'></div>
       </div>
     );
   }
